@@ -14,15 +14,18 @@ keykup_size = 2.5 * const
 keycap_range = 0.25 * const
 dark_color = (30, 30, 30)
 bright_color = (230, 230, 230)
-background_color = dark_color
-keyboard_color = bright_color
-second_keyboard_color = dark_color
+# background_color = dark_color
+# keyboard_color = bright_color
+# second_keyboard_color = dark_color
 pygame.init()
 pygame.font.init()
 font = pygame.font.Font('font/YandexSansDisplay-Light.ttf', round(0.8 * const))
+font1 = pygame.font.Font('font/YandexSansDisplay-Light.ttf', round(2.5 * const))
 screen = pygame.display.set_mode((width, height))
 hubscreen = pygame.Surface((width / 2, height / 2))
 click = False
+layout = 'en'
+dark_theme = True
 
 keys_en = ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace', 'tab', 'Q', 'W', 'E', 'R',
            'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\', 'caps', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', "'",
@@ -31,6 +34,14 @@ keys_en = ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'bac
 keys_en_sh = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'backspace', 'tab', 'Q', 'W', 'E', 'R',
               'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '|', 'caps', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':',
               '"', 'enter', 'shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 'shift', 'ctrl', 'win', 'alt',
+              'space', 'alt', 'fn', 'some', 'ctrl']
+keys_ru = ['Ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace', 'tab', 'Й', 'Ц', 'У', 'К', 'Е',
+           'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', '\\', 'caps', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э',
+           'enter', 'shift', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', '.', 'shift', 'ctrl', 'win', 'alt', 'space',
+           'alt', 'fn', 'some', 'ctrl']
+keys_ru_sh = ['Ё', '!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+', 'backspace', 'tab', 'Й', 'Ц', 'У', 'К',
+              'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', '/', 'caps', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж',
+              'Э', 'enter', 'shift', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', ',', 'shift', 'ctrl', 'win', 'alt',
               'space', 'alt', 'fn', 'some', 'ctrl']
 clock = pygame.time.Clock()
 keyboard_recs = [pygame.Rect(keyboard_margin_left, keyboard_margin_top, keykup_size, keykup_size),
@@ -176,25 +187,49 @@ class Player:
 
 
 def settings():
-    global running
+    global running, layout, dark_color, bright_color, dark_theme
     setting = True
     click = False
     while setting:
-        screen.fill(background_color)
-        settings_button = pygame.Rect(10, 10, 40, 40)
+        screen.fill(dark_color)
+        settings_button = pygame.Rect(0.5 * const, 0.5 * const, 2 * const, 2 * const)
         pygame.draw.rect(screen, bright_color, settings_button, 1, int(const / 6))
         text = font.render('back', True, bright_color)
         text_rect = text.get_rect(center=settings_button.center)
         screen.blit(text, text_rect)
 
-        # text = font.render('back', True, bright_color)
-        # text_rect = text.get_rect(center=settings_button.center)
-        # screen.blit(text, text_rect)
+        rct = pygame.Rect(width / 2, 5 * const, 0, 0)
+        text = font1.render('SETTINGS', True, bright_color)
+        text_rect = text.get_rect(center=rct.center)
+        screen.blit(text, text_rect)
 
-        theme_button = pygame.Rect(200, 220, 1200, 100)
-        pygame.draw.rect(screen, bright_color, theme_button, 1, int(const / 6))
+        theme_button = pygame.Rect(10 * const, 11 * const, 60 * const, 5 * const)
+        pygame.draw.rect(screen, bright_color, theme_button, 1)
+
+        layout_button = pygame.Rect(200, 350, 1200, 100)
+        pygame.draw.rect(screen, bright_color, layout_button, 1)
+
         if settings_button.collidepoint(pygame.mouse.get_pos()) and click:
             setting = False
+        if layout_button.collidepoint(pygame.mouse.get_pos()) and click:
+            if layout == 'en':
+                layout = 'ru'
+            elif layout == 'ru':
+                layout = 'en'
+            click = False
+        if theme_button.collidepoint(pygame.mouse.get_pos()) and click:
+            if dark_theme:
+                x = dark_color
+                dark_color = bright_color
+                bright_color = x
+                dark_theme = False
+            else:
+                x = dark_color
+                dark_color = bright_color
+                bright_color = x
+                dark_theme = True
+            click = False
+
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -236,10 +271,16 @@ def print_keyboard(key_pressed):
 
 def print_values(key_pressed):
     t = 0
-    if 43 in key_pressed or 53 in key_pressed:
-        keys = keys_en_sh
-    else:
-        keys = keys_en
+    if layout == 'en':
+        if 43 in key_pressed or 53 in key_pressed:
+            keys = keys_en_sh
+        else:
+            keys = keys_en
+    elif layout == 'ru':
+        if 43 in key_pressed or 53 in key_pressed:
+            keys = keys_ru_sh
+        else:
+            keys = keys_ru
     for keycup in keyboard_recs:
         text = font.render(keys[t], True, bright_color)
         text_rect = text.get_rect(center=keycup.center)
