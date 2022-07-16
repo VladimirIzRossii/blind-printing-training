@@ -22,10 +22,11 @@ pygame.font.init()
 font = pygame.font.Font('font/YandexSansDisplay-Light.ttf', round(0.8 * const))
 font1 = pygame.font.Font('font/YandexSansDisplay-Light.ttf', round(2.5 * const))
 screen = pygame.display.set_mode((width, height))
-hubscreen = pygame.Surface((width / 2, height / 2))
 click = False
 layout = 'en'
+resolution = '900p'
 dark_theme = True
+fullscreen = False
 
 keys_en = ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace', 'tab', 'Q', 'W', 'E', 'R',
            'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\', 'caps', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', "'",
@@ -44,138 +45,185 @@ keys_ru_sh = ['Ё', '!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+'
               'Э', 'enter', 'shift', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', ',', 'shift', 'ctrl', 'win', 'alt',
               'space', 'alt', 'fn', 'some', 'ctrl']
 clock = pygame.time.Clock()
-keyboard_recs = [pygame.Rect(keyboard_margin_left, keyboard_margin_top, keykup_size, keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 1 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 2 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 3 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 4 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 5 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 6 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 7 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 8 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 9 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 10 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 11 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 12 + keyboard_margin_left, keyboard_margin_top, keykup_size,
-                             keykup_size),
-                 pygame.Rect((keykup_size + keycap_range) * 13 + keyboard_margin_left, keyboard_margin_top,
-                             2 * keykup_size, keykup_size),
 
-                 pygame.Rect(keyboard_margin_left, keyboard_margin_top + keycap_range + keykup_size,
-                             1.5 * keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + keycap_range,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 2 * keycap_range + keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 3 * keycap_range + 2 * keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 4 * keycap_range + 3 * keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 5 * keycap_range + 4 * keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 6 * keycap_range + 5 * keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 7 * keycap_range + 6 * keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 8 * keycap_range + 7 * keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 9 * keycap_range + 8 * keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 10 * keycap_range + 9 * keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 11 * keycap_range + 10 * keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 12 * keycap_range + 11 * keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 13 * keycap_range + 12 * keykup_size,
-                             keyboard_margin_top + keycap_range + keykup_size, 1.5 * keykup_size, keykup_size),
 
-                 pygame.Rect(keyboard_margin_left, keyboard_margin_top + (keycap_range + keykup_size) * 2,
-                             1.8 * keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + keycap_range,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 2 * keycap_range + keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 3 * keycap_range + 2 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 4 * keycap_range + 3 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 5 * keycap_range + 4 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 6 * keycap_range + 5 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 7 * keycap_range + 6 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 8 * keycap_range + 7 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 9 * keycap_range + 8 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 10 * keycap_range + 9 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 11 * keycap_range + 10 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 12 * keycap_range + 11 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 2, 2.2 * keykup_size + keycap_range,
-                             keykup_size),
+def upd():
+    global keyboard_recs, screen, const, width, height, keyboard_margin_top, keyboard_margin_left, keykup_size, \
+        keycap_range, font, font1, tx, tx1, tx2
+    const = height / 45
+    keyboard_margin_left = 18.25 * const
+    keyboard_margin_top = 25 * const
+    keykup_size = 2.5 * const
+    keycap_range = 0.25 * const
+    tumbler_rect = pygame.Rect(10 * const * 1.05 + 60 * const * 0.8 + (11 * const * 1.05 - 11 * const),
+                               11 * const * 1.05,
+                               60 * const - 60 * const * 0.8 - const * 1.05 - (11 * const * 1.05 - 11 * const),
+                               5 * const * 0.8)
+    tx1 = tumbler_rect.right - 3.5 * const
+    tx2 = tumbler_rect.left + 3.5 * const
+    tx = tx1
+    font = pygame.font.Font('font/YandexSansDisplay-Light.ttf', round(0.8 * const))
+    font1 = pygame.font.Font('font/YandexSansDisplay-Light.ttf', round(2.5 * const))
+    if fullscreen:
+        screen = pygame.display.set_mode((width, height), pygame.FULLSCREEN)
+    else:
+        screen = pygame.display.set_mode((width, height))
+    keyboard_recs = [pygame.Rect(keyboard_margin_left, keyboard_margin_top, keykup_size, keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 1 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 2 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 3 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 4 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 5 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 6 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 7 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 8 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 9 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 10 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 11 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 12 + keyboard_margin_left, keyboard_margin_top,
+                                 keykup_size,
+                                 keykup_size),
+                     pygame.Rect((keykup_size + keycap_range) * 13 + keyboard_margin_left, keyboard_margin_top,
+                                 2 * keykup_size, keykup_size),
 
-                 pygame.Rect(keyboard_margin_left, keyboard_margin_top + (keycap_range + keykup_size) * 3,
-                             2.6 * keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + keycap_range,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 2 * keycap_range + keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 3 * keycap_range + 2 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 4 * keycap_range + 3 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 5 * keycap_range + 4 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 6 * keycap_range + 5 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 7 * keycap_range + 6 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 8 * keycap_range + 7 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 9 * keycap_range + 8 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 10 * keycap_range + 9 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 11 * keycap_range + 10 * keykup_size,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 3, 2.6 * keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left, keyboard_margin_top + keycap_range + keykup_size,
+                                 1.5 * keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + keycap_range,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 2 * keycap_range + keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 3 * keycap_range + 2 * keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 4 * keycap_range + 3 * keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 5 * keycap_range + 4 * keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 6 * keycap_range + 5 * keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 7 * keycap_range + 6 * keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 8 * keycap_range + 7 * keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 9 * keycap_range + 8 * keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 10 * keycap_range + 9 * keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 11 * keycap_range + 10 * keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 12 * keycap_range + 11 * keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.5 * keykup_size + 13 * keycap_range + 12 * keykup_size,
+                                 keyboard_margin_top + keycap_range + keykup_size, 1.5 * keykup_size, keykup_size),
 
-                 pygame.Rect(keyboard_margin_left, keyboard_margin_top + (keycap_range + keykup_size) * 4,
-                             1.2 * keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + 1.2 * keykup_size + keycap_range,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + (1.2 * keykup_size + keycap_range) * 2,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + (1.2 * keykup_size + keycap_range) * 3,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 4, 7 * keykup_size + 2 * keycap_range,
-                             keykup_size),
-                 pygame.Rect(keyboard_margin_left + (1.2 * keykup_size) * 3 + keycap_range * 4 + keykup_size * 7 + 2 *
-                             keycap_range,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + (1.2 * keykup_size) * 4 + keycap_range * 5 + keykup_size * 7 + 2 *
-                             keycap_range,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + (1.2 * keykup_size) * 5 + keycap_range * 6 + keykup_size * 7 + 2 *
-                             keycap_range,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size, keykup_size),
-                 pygame.Rect(keyboard_margin_left + (1.2 * keykup_size) * 6 + keycap_range * 7 + keykup_size * 7 + 2 *
-                             keycap_range,
-                             keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size, keykup_size),
-                 ]
+                     pygame.Rect(keyboard_margin_left, keyboard_margin_top + (keycap_range + keykup_size) * 2,
+                                 1.8 * keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + keycap_range,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 2 * keycap_range + keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 3 * keycap_range + 2 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 4 * keycap_range + 3 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 5 * keycap_range + 4 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 6 * keycap_range + 5 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 7 * keycap_range + 6 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 8 * keycap_range + 7 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 9 * keycap_range + 8 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 10 * keycap_range + 9 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 11 * keycap_range + 10 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.8 * keykup_size + 12 * keycap_range + 11 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 2,
+                                 2.2 * keykup_size + keycap_range,
+                                 keykup_size),
+
+                     pygame.Rect(keyboard_margin_left, keyboard_margin_top + (keycap_range + keykup_size) * 3,
+                                 2.6 * keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + keycap_range,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 2 * keycap_range + keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 3 * keycap_range + 2 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 4 * keycap_range + 3 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 5 * keycap_range + 4 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 6 * keycap_range + 5 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 7 * keycap_range + 6 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 8 * keycap_range + 7 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 9 * keycap_range + 8 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 10 * keycap_range + 9 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 3, keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 2.6 * keykup_size + 11 * keycap_range + 10 * keykup_size,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 3, 2.6 * keykup_size,
+                                 keykup_size),
+
+                     pygame.Rect(keyboard_margin_left, keyboard_margin_top + (keycap_range + keykup_size) * 4,
+                                 1.2 * keykup_size, keykup_size),
+                     pygame.Rect(keyboard_margin_left + 1.2 * keykup_size + keycap_range,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size,
+                                 keykup_size),
+                     pygame.Rect(keyboard_margin_left + (1.2 * keykup_size + keycap_range) * 2,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size,
+                                 keykup_size),
+                     pygame.Rect(keyboard_margin_left + (1.2 * keykup_size + keycap_range) * 3,
+                                 keyboard_margin_top + (keycap_range + keykup_size) * 4,
+                                 7 * keykup_size + 2 * keycap_range,
+                                 keykup_size),
+                     pygame.Rect(
+                         keyboard_margin_left + (1.2 * keykup_size) * 3 + keycap_range * 4 + keykup_size * 7 + 2 *
+                         keycap_range,
+                         keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size, keykup_size),
+                     pygame.Rect(
+                         keyboard_margin_left + (1.2 * keykup_size) * 4 + keycap_range * 5 + keykup_size * 7 + 2 *
+                         keycap_range,
+                         keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size, keykup_size),
+                     pygame.Rect(
+                         keyboard_margin_left + (1.2 * keykup_size) * 5 + keycap_range * 6 + keykup_size * 7 + 2 *
+                         keycap_range,
+                         keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size, keykup_size),
+                     pygame.Rect(
+                         keyboard_margin_left + (1.2 * keykup_size) * 6 + keycap_range * 7 + keykup_size * 7 + 2 *
+                         keycap_range,
+                         keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size, keykup_size),
+                     ]
+
+
+upd()
 
 
 class Player:
@@ -187,9 +235,13 @@ class Player:
 
 
 def settings():
-    global running, layout, dark_color, bright_color, dark_theme
+    global running, layout, dark_color, bright_color, dark_theme, resolution, screen, const, width, height, \
+        keyboard_margin_top, keyboard_margin_left, keykup_size, keycap_range, fullscreen, tx
     setting = True
     click = False
+    velocity = 120
+    tvelocity = 240
+    change_theme = False
     while setting:
         screen.fill(dark_color)
         settings_button = pygame.Rect(0.5 * const, 0.5 * const, 2 * const, 2 * const)
@@ -204,10 +256,83 @@ def settings():
         screen.blit(text, text_rect)
 
         theme_button = pygame.Rect(10 * const, 11 * const, 60 * const, 5 * const)
+        theme_text = pygame.Rect(10 * const * 1.05, 11 * const * 1.05, 60 * const * 0.8, 5 * const * 0.8)
+        tumbler = pygame.Rect(10 * const * 1.05 + 60 * const * 0.8 + (11 * const * 1.05 - 11 * const) +
+                              (60 * const - 60 * const * 0.8 - const * 1.05 - (11 * const * 1.05 - 11 * const)) * 0.2,
+                              11 * const * 1.05 + 5 * const * 0.8 * 0.2,
+                              (60 * const - 60 * const * 0.8 - const * 1.05 - (11 * const * 1.05 - 11 * const)) * 0.6,
+                              5 * const * 0.8 * 0.6)
+        tumbler1 = pygame.Rect(10 * const * 1.05 + 60 * const * 0.8 + (11 * const * 1.05 - 11 * const) +
+                               (60 * const - 60 * const * 0.8 - const * 1.05 - (11 * const * 1.05 - 11 * const)) * 0.2,
+                               11 * const * 1.05 + 5 * const * 0.8 * 0.2,
+                               tx - (10 * const * 1.05 + 60 * const * 0.8 + (11 * const * 1.05 - 11 * const) +
+                                     (60 * const - 60 * const * 0.8 - const * 1.05 - (
+                                                 11 * const * 1.05 - 11 * const)) * 0.2) + 0.25 * const + 1.3 * const,
+                               5 * const * 0.8 * 0.6)
+        pygame.draw.rect(screen, (150, 0, 0), tumbler, 0, int(1000 * const))
+        pygame.draw.rect(screen, (0, 150, 0), tumbler1, 0, int(1000 * const))
+        text = font1.render('Dark theme', True, bright_color)
+        text_rect = text.get_rect(center=theme_text.center)
+        screen.blit(text, (theme_text.left, text_rect[1]))
         pygame.draw.rect(screen, bright_color, theme_button, 1)
+        pygame.draw.circle(screen, (120, 120, 120), (tx, tumbler.centery),
+                           1.5 * const, 0)
 
-        layout_button = pygame.Rect(200, 350, 1200, 100)
+        layout_button = pygame.Rect(10 * const, 17.5 * const, 60 * const, 5 * const)
+        layout_text = pygame.Rect(10 * const * 1.05, 17.5 * const * 1.03, 60 * const * 0.8, 5 * const * 0.8)
+        language_rect = pygame.Rect(10 * const * 1.05 + 60 * const * 0.8 + (11 * const * 1.05 - 11 * const),
+                                    17.5 * const * 1.03,
+                                    60 * const - 60 * const * 0.8 - const * 1.05 - (11 * const * 1.05 - 11 * const),
+                                    5 * const * 0.8)
+        # pygame.draw.rect(screen, bright_color, layout_text, 1)
+        pygame.draw.rect(screen, bright_color, language_rect, 1)
+        text = font1.render('Layout', True, bright_color)
+        text_rect = text.get_rect(center=layout_text.center)
+        screen.blit(text, (layout_text.left, text_rect[1]))
+        text = font1.render(layout.upper(), True, bright_color)
+        text_rect = text.get_rect(center=language_rect.center)
+        screen.blit(text, text_rect)
         pygame.draw.rect(screen, bright_color, layout_button, 1)
+
+        resolution_button = pygame.Rect(10 * const, 24 * const, 60 * const, 5 * const)
+        resolution_text = pygame.Rect(10 * const * 1.05, 24 * const * 1.02, 60 * const * 0.8, 5 * const * 0.8)
+        resolution_rect = pygame.Rect(10 * const * 1.05 + 60 * const * 0.8 + (11 * const * 1.05 - 11 * const),
+                                      24 * const * 1.02,
+                                      60 * const - 60 * const * 0.8 - const * 1.05 - (11 * const * 1.05 - 11 * const),
+                                      5 * const * 0.8)
+        # pygame.draw.rect(screen, bright_color, resolution_text, 1)
+        pygame.draw.rect(screen, bright_color, resolution_rect, 1)
+        text = font1.render('Resolution', True, bright_color)
+        text_rect = text.get_rect(center=resolution_text.center)
+        screen.blit(text, (layout_text.left, text_rect[1]))
+        text = font1.render(resolution, True, bright_color)
+        text_rect = text.get_rect(center=resolution_rect.center)
+        screen.blit(text, text_rect)
+        pygame.draw.rect(screen, bright_color, resolution_button, 1)
+
+        fullscreen_button = pygame.Rect(10 * const, 30.5 * const, 60 * const, 5 * const)
+        theme_text = pygame.Rect(10 * const * 1.05, 30.5 * const * 1.015, 60 * const * 0.8, 5 * const * 0.8)
+        tumbler_rect = pygame.Rect(10 * const * 1.05 + 60 * const * 0.8 + (11 * const * 1.05 - 11 * const),
+                                   30.5 * const * 1.015,
+                                   60 * const - 60 * const * 0.8 - const * 1.05 - (11 * const * 1.05 - 11 * const),
+                                   5 * const * 0.8)
+        tumbler1 = pygame.Rect(10 * const * 1.05 + 60 * const * 0.8 + (11 * const * 1.05 - 11 * const) +
+                               (60 * const - 60 * const * 0.8 - const * 1.05 - (11 * const * 1.05 - 11 * const)) * 0.2,
+                               (11 * const * 1.05 + 5 * const * 0.8 * 0.2) * 2.57,
+                               (60 * const - 60 * const * 0.8 - const * 1.05 - (11 * const * 1.05 - 11 * const)) * 0.6,
+                               5 * const * 0.8 * 0.6)
+        if fullscreen:
+            pygame.draw.rect(screen, (0, 150, 0), tumbler1, 0, int(1000 * const))
+            pygame.draw.circle(screen, (120, 120, 120), (tumbler_rect.right - 3.5 * const, tumbler1.centery),
+                               1.5 * const, 0)
+        else:
+            pygame.draw.rect(screen, (150, 0, 0), tumbler1, 0, int(1000 * const))
+            pygame.draw.circle(screen, (120, 120, 120), (tumbler_rect.left + 3.5 * const, tumbler1.centery),
+                               1.5 * const, 0)
+        text = font1.render('Fullscreen', True, bright_color)
+        text_rect = text.get_rect(center=theme_text.center)
+        screen.blit(text, (theme_text.left, text_rect[1]))
+        pygame.draw.rect(screen, bright_color, fullscreen_button, 1)
 
         if settings_button.collidepoint(pygame.mouse.get_pos()) and click:
             setting = False
@@ -219,16 +344,45 @@ def settings():
             click = False
         if theme_button.collidepoint(pygame.mouse.get_pos()) and click:
             if dark_theme:
-                x = dark_color
-                dark_color = bright_color
-                bright_color = x
                 dark_theme = False
             else:
-                x = dark_color
-                dark_color = bright_color
-                bright_color = x
                 dark_theme = True
+            # dark_color, bright_color = bright_color, dark_color
             click = False
+            change_theme = True
+        if fullscreen_button.collidepoint(pygame.mouse.get_pos()) and click:
+            fullscreen = not fullscreen
+            click = False
+            upd()
+        if resolution_button.collidepoint(pygame.mouse.get_pos()) and click:
+            if resolution == '900p':
+                resolution = '1080p'
+                width, height = 1920, 1080
+            elif resolution == '1080p':
+                resolution = '720p'
+                width, height = 1280, 720
+            elif resolution == '720p':
+                resolution = '900p'
+                width, height = 1600, 900
+            click = False
+            upd()
+        if change_theme:
+            if dark_theme:
+                if dark_color[0] > 30:
+                    x = dark_color[0] - velocity / fps
+                    dark_color = (x, x, x)
+                    x = bright_color[0] + velocity / fps
+                    bright_color = (x, x, x)
+                if tx < tx1:
+                    tx += tvelocity / fps
+            else:
+                if dark_color[0] < 230:
+                    x = dark_color[0] + velocity / fps
+                    dark_color = (x, x, x)
+                    x = bright_color[0] - velocity / fps
+                    bright_color = (x, x, x)
+                if tx > tx2:
+                    tx -= tvelocity / fps
 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -261,7 +415,6 @@ def ui():
 
 def print_keyboard(key_pressed):
     # pygame.draw.rect(screen, (255, 255, 255), [50, 400, 1500, 450], 1)
-    t = 0
     for keycup in keyboard_recs:
         pygame.draw.rect(screen, bright_color, keycup, 1, int(const / 6))
     if key_pressed:
@@ -299,13 +452,13 @@ def run():
     print_values(key_presed)
 
 
-plr = Player(35)
 # crosshair = Crosshair()
 running = True
 last_time = time.time()
 key_presed = []
 
 while running:
+    # print(const, keykup_size)
     # print(key_presed)
     # pygame.mouse.set_visible(False)
     # print(pygame.key.get_pressed()[pygame.K_w])
