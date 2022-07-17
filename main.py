@@ -239,8 +239,8 @@ def settings():
         keyboard_margin_top, keyboard_margin_left, keykup_size, keycap_range, fullscreen, tx
     setting = True
     click = False
-    velocity = 120
-    tvelocity = 240
+    velocity = 180
+    tvelocity = 360
     change_theme = False
     while setting:
         screen.fill(dark_color)
@@ -267,14 +267,14 @@ def settings():
                                11 * const * 1.05 + 5 * const * 0.8 * 0.2,
                                tx - (10 * const * 1.05 + 60 * const * 0.8 + (11 * const * 1.05 - 11 * const) +
                                      (60 * const - 60 * const * 0.8 - const * 1.05 - (
-                                                 11 * const * 1.05 - 11 * const)) * 0.2) + 0.25 * const + 1.3 * const,
+                                             11 * const * 1.05 - 11 * const)) * 0.2) + 0.25 * const + 1.3 * const,
                                5 * const * 0.8 * 0.6)
         pygame.draw.rect(screen, (150, 0, 0), tumbler, 0, int(1000 * const))
         pygame.draw.rect(screen, (0, 150, 0), tumbler1, 0, int(1000 * const))
         text = font1.render('Dark theme', True, bright_color)
         text_rect = text.get_rect(center=theme_text.center)
         screen.blit(text, (theme_text.left, text_rect[1]))
-        pygame.draw.rect(screen, bright_color, theme_button, 1)
+        # pygame.draw.rect(screen, bright_color, theme_button, 1)
         pygame.draw.circle(screen, (120, 120, 120), (tx, tumbler.centery),
                            1.5 * const, 0)
 
@@ -292,7 +292,7 @@ def settings():
         text = font1.render(layout.upper(), True, bright_color)
         text_rect = text.get_rect(center=language_rect.center)
         screen.blit(text, text_rect)
-        pygame.draw.rect(screen, bright_color, layout_button, 1)
+        # pygame.draw.rect(screen, bright_color, layout_button, 1)
 
         resolution_button = pygame.Rect(10 * const, 24 * const, 60 * const, 5 * const)
         resolution_text = pygame.Rect(10 * const * 1.05, 24 * const * 1.02, 60 * const * 0.8, 5 * const * 0.8)
@@ -308,7 +308,7 @@ def settings():
         text = font1.render(resolution, True, bright_color)
         text_rect = text.get_rect(center=resolution_rect.center)
         screen.blit(text, text_rect)
-        pygame.draw.rect(screen, bright_color, resolution_button, 1)
+        # pygame.draw.rect(screen, bright_color, resolution_button, 1)
 
         fullscreen_button = pygame.Rect(10 * const, 30.5 * const, 60 * const, 5 * const)
         theme_text = pygame.Rect(10 * const * 1.05, 30.5 * const * 1.015, 60 * const * 0.8, 5 * const * 0.8)
@@ -332,7 +332,25 @@ def settings():
         text = font1.render('Fullscreen', True, bright_color)
         text_rect = text.get_rect(center=theme_text.center)
         screen.blit(text, (theme_text.left, text_rect[1]))
-        pygame.draw.rect(screen, bright_color, fullscreen_button, 1)
+        # pygame.draw.rect(screen, bright_color, fullscreen_button, 1)
+
+        pygame.draw.line(screen, bright_color, (theme_button.left,
+                                                theme_button.top - (layout_button.top - theme_button.bottom) / 2,),
+                         (theme_button.right, theme_button.top - (layout_button.top - theme_button.bottom) / 2))
+        pygame.draw.line(screen, bright_color, (theme_button.left,
+                                                theme_button.bottom + (layout_button.top - theme_button.bottom) / 2,),
+                         (theme_button.right, theme_button.bottom + (layout_button.top - theme_button.bottom) / 2))
+        pygame.draw.line(screen, bright_color, (theme_button.left,
+                                                layout_button.bottom + (layout_button.top - theme_button.bottom) / 2,),
+                         (theme_button.right, layout_button.bottom + (layout_button.top - theme_button.bottom) / 2))
+        pygame.draw.line(screen, bright_color, (theme_button.left,
+                                                resolution_button.bottom +
+                                                (layout_button.top - theme_button.bottom) / 2,),
+                         (theme_button.right, resolution_button.bottom + (layout_button.top - theme_button.bottom) / 2))
+        pygame.draw.line(screen, bright_color, (theme_button.left,
+                                                fullscreen_button.bottom +
+                                                (layout_button.top - theme_button.bottom) / 2,),
+                         (theme_button.right, fullscreen_button.bottom + (layout_button.top - theme_button.bottom) / 2))
 
         if settings_button.collidepoint(pygame.mouse.get_pos()) and click:
             setting = False
@@ -420,6 +438,10 @@ def print_keyboard(key_pressed):
     if key_pressed:
         for key in key_pressed:
             pygame.draw.rect(screen, bright_color, keyboard_recs[key - 1], 0, int(const / 6))
+    pygame.draw.rect(screen, bright_color, (keyboard_recs[0].left - keycap_range, keyboard_recs[0].top -
+                                            keycap_range,
+                                            keyboard_recs[-1].right - keyboard_recs[0].left + 2 * keycap_range,
+                                            5 * keykup_size + keycap_range * 6), 1)
 
 
 def print_values(key_pressed):
