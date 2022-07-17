@@ -1,10 +1,33 @@
 import pygame
+pygame.init()
+window = pygame.display.set_mode((500, 200))
+clock = pygame.time.Clock()
 
-pygame.font.init()
-screen = pygame.display.set_mode((1600, 900))
-font = pygame.font.Font('font/YandexSansDisplay-Light.ttf', 25)
-text = font.render("You win!", True, (255, 255, 255))
-text_rect = text.get_rect(center=(1600/2, 900/2))
-while True:
-    screen.blit(text, text_rect)
-    pygame.display.flip()
+font = pygame.font.SysFont(None, 100)
+text = ""
+input_active = True
+
+run = True
+while run:
+    clock.tick(60)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            input_active = True
+            text = ""
+        elif event.type == pygame.KEYDOWN and input_active:
+            if event.key == pygame.K_RETURN:
+                input_active = False
+            elif event.key == pygame.K_BACKSPACE:
+                text =  text[:-1]
+            else:
+                text += event.unicode
+
+        window.fill(0)
+        text_surf = font.render(text, True, (255, 0, 0))
+        window.blit(text_surf, text_surf.get_rect(center = window.get_rect().center))
+        pygame.display.flip()
+
+pygame.quit()
+exit()

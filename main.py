@@ -27,6 +27,9 @@ layout = 'en'
 resolution = '900p'
 dark_theme = True
 fullscreen = False
+printed_text = ''
+input_active = True
+globalt = 0
 
 keys_en = ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'backspace', 'tab', 'Q', 'W', 'E', 'R',
            'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\', 'caps', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', "'",
@@ -49,9 +52,9 @@ clock = pygame.time.Clock()
 
 def upd():
     global keyboard_recs, screen, const, width, height, keyboard_margin_top, keyboard_margin_left, keykup_size, \
-        keycap_range, font, font1, tx, tx1, tx2
+        keycap_range, font, font1, font2, tx, tx1, tx2, printed_text_rect
     const = height / 45
-    keyboard_margin_left = 18.25 * const
+    keyboard_margin_left = 19.375 * const
     keyboard_margin_top = 25 * const
     keykup_size = 2.5 * const
     keycap_range = 0.25 * const
@@ -64,6 +67,7 @@ def upd():
     tx = tx1
     font = pygame.font.Font('font/YandexSansDisplay-Light.ttf', round(0.8 * const))
     font1 = pygame.font.Font('font/YandexSansDisplay-Light.ttf', round(2.5 * const))
+    font2 = pygame.font.Font('font/YandexSansDisplay-Light.ttf', round(2.5 * const))
     if fullscreen:
         screen = pygame.display.set_mode((width, height), pygame.FULLSCREEN)
     else:
@@ -221,6 +225,10 @@ def upd():
                          keycap_range,
                          keyboard_margin_top + (keycap_range + keykup_size) * 4, 1.2 * keykup_size, keykup_size),
                      ]
+    board_rect = pygame.Rect(keyboard_recs[0].left - keycap_range, keyboard_recs[0].top - keycap_range,
+                             keyboard_recs[-1].right - keyboard_recs[0].left + 2 * keycap_range,
+                             5 * keykup_size + keycap_range * 6)
+    printed_text_rect = pygame.Rect(12 * const, 0,  width - 24 * const, board_rect.top)
 
 
 upd()
@@ -267,7 +275,7 @@ def settings():
                                11 * const * 1.05 + 5 * const * 0.8 * 0.2,
                                tx - (10 * const * 1.05 + 60 * const * 0.8 + (11 * const * 1.05 - 11 * const) +
                                      (60 * const - 60 * const * 0.8 - const * 1.05 - (
-                                             11 * const * 1.05 - 11 * const)) * 0.2) + 0.25 * const + 1.3 * const,
+                                             11 * const * 1.05 - 11 * const)) * 0.2) + 0.25 * const + 1.25 * const,
                                5 * const * 0.8 * 0.6)
         pygame.draw.rect(screen, (150, 0, 0), tumbler, 0, int(1000 * const))
         pygame.draw.rect(screen, (0, 150, 0), tumbler1, 0, int(1000 * const))
@@ -432,16 +440,17 @@ def ui():
 
 
 def print_keyboard(key_pressed):
+    global board_rect
     # pygame.draw.rect(screen, (255, 255, 255), [50, 400, 1500, 450], 1)
     for keycup in keyboard_recs:
         pygame.draw.rect(screen, bright_color, keycup, 1, int(const / 6))
     if key_pressed:
         for key in key_pressed:
             pygame.draw.rect(screen, bright_color, keyboard_recs[key - 1], 0, int(const / 6))
-    pygame.draw.rect(screen, bright_color, (keyboard_recs[0].left - keycap_range, keyboard_recs[0].top -
-                                            keycap_range,
-                                            keyboard_recs[-1].right - keyboard_recs[0].left + 2 * keycap_range,
-                                            5 * keykup_size + keycap_range * 6), 1)
+    board_rect = pygame.Rect(keyboard_recs[0].left - keycap_range, keyboard_recs[0].top - keycap_range,
+                             keyboard_recs[-1].right - keyboard_recs[0].left + 2 * keycap_range,
+                             5 * keykup_size + keycap_range * 6)
+    pygame.draw.rect(screen, bright_color, board_rect, 1)
 
 
 def print_values(key_pressed):
@@ -468,10 +477,32 @@ def print_values(key_pressed):
             screen.blit(text, text_rect)
 
 
+def print_text():
+    global printed_text, globalt
+    text_input = printed_text.split('\n')
+    t = 0
+    globalt += 1
+    if globalt <= 50:
+        text_input[-1] += '|'
+    elif globalt == 100:
+        globalt = 0
+    for i in range(len(text_input)):
+        x = int(len(text_input)) / 2 - i
+        text = font2.render(text_input[i], True, bright_color)
+        text_rect = text.get_rect(center=printed_text_rect.center)
+        screen.blit(text, (printed_text_rect.left, text_rect[1] - x * (text_rect[1] - printed_text_rect.centery)))
+        if text.get_rect().width >= printed_text_rect.width and text_input[i] == text_input[-1]:
+            printed_text += '\n'
+        t += 1
+    pygame.draw.line(screen, bright_color, (printed_text_rect.left, printed_text_rect.centery),
+                     (printed_text_rect.right, printed_text_rect.centery), 1)
+
+
 def run():
     ui()
     print_keyboard(key_presed)
     print_values(key_presed)
+    print_text()
 
 
 # crosshair = Crosshair()
@@ -480,10 +511,7 @@ last_time = time.time()
 key_presed = []
 
 while running:
-    # print(const, keykup_size)
-    # print(key_presed)
     # pygame.mouse.set_visible(False)
-    # print(pygame.key.get_pressed()[pygame.K_w])
     screen.fill(dark_color)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -495,76 +523,6 @@ while running:
             if event.button == 1:
                 click = False
         if event.type == pygame.KEYDOWN:
-            # if event.key == pygame.K_q:
-            #     key_presed = 16
-            # if event.key == pygame.K_w:
-            #     key_presed = 17
-            # if event.key == pygame.K_e:
-            #     key_presed = 18
-            # if event.key == pygame.K_r:
-            #     key_presed = 19
-            # if event.key == pygame.K_t:
-            #     key_presed = 20
-            # if event.key == pygame.K_y:
-            #     key_presed = 21
-            # if event.key == pygame.K_u:
-            #     key_presed = 22
-            # if event.key == pygame.K_i:
-            #     key_presed = 23
-            # if event.key == pygame.K_o:
-            #     key_presed = 24
-            # if event.key == pygame.K_p:
-            #     key_presed = 25
-            # if event.key == pygame.K_LEFTBRACKET:
-            #     key_presed = 26
-            # if event.key == pygame.K_RIGHTBRACKET:
-            #     key_presed = 27
-            # if event.key == pygame.K_BACKSLASH:
-            #     key_presed = 28
-            # if event.key == pygame.K_a:
-            #     key_presed = 30
-            # if event.key == pygame.K_s:
-            #     key_presed = 31
-            # if event.key == pygame.K_d:
-            #     key_presed = 32
-            # if event.key == pygame.K_f:
-            #     key_presed = 33
-            # if event.key == pygame.K_g:
-            #     key_presed = 34
-            # if event.key == pygame.K_h:
-            #     key_presed = 35
-            # if event.key == pygame.K_j:
-            #     key_presed = 36
-            # if event.key == pygame.K_k:
-            #     key_presed = 37
-            # if event.key == pygame.K_l:
-            #     key_presed = 38
-            # if event.key == pygame.K_SEMICOLON:
-            #     key_presed = 39
-            # if event.key == pygame.K_QUOTEDBL:
-            #     key_presed = 40
-            # if event.key == pygame.K_z:
-            #     key_presed = 43
-            # if event.key == pygame.K_x:
-            #     key_presed = 44
-            # if event.key == pygame.K_c:
-            #     key_presed = 45
-            # if event.key == pygame.K_v:
-            #     key_presed = 46
-            # if event.key == pygame.K_b:
-            #     key_presed = 47
-            # if event.key == pygame.K_n:
-            #     key_presed = 48
-            # if event.key == pygame.K_m:
-            #     key_presed = 49
-            # if event.key == pygame.K_COMMA:
-            #     key_presed = 50
-            # if event.key == pygame.K_PERIOD:
-            #     key_presed = 51
-            # if event.key == pygame.K_SLASH:
-            #     key_presed = 52
-            # if event.key == pygame.K_SPACE:
-            #     key_presed = 57
             if event.key == pygame.K_BACKQUOTE:
                 key_presed.append(1)
             if event.key == pygame.K_1:
@@ -666,6 +624,12 @@ while running:
                 key_presed.append(53)
             if event.key == pygame.K_BACKSPACE:
                 key_presed.append(14)
+                if printed_text[-1] != '\n':
+                    printed_text = printed_text[:-1]
+                else:
+                    printed_text = printed_text[:-2]
+            elif input_active:
+                printed_text += event.unicode
         if event.type == pygame.KEYUP:
             # key_presed = 0
             if event.key == pygame.K_BACKQUOTE:
